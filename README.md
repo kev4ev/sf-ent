@@ -7,10 +7,16 @@ The Salesforce Composite API is an invaluable tool for loading complex data acro
 `sf-entish` provides a declarative API for building composite payloads quickly and intuitively. Use it interactively from the command line or as a library in a script. This library adds some helpful tricks and shortcuts such as **randomization** and **variable placeholders** to get you up-and-running quickly.
 
 # Installation
-> npm install [--global] sf-entish
 
-**This library also drives the sf CLI (@salesforce/cli) plugin `sf-plugin-composite`, which you can install as such**:
-> sf plugins install sf-plugin-composite
+```sh
+npm install [--global] sf-entish
+```
+
+This library also drives the Salesforce CLI (sf) plugin `sf-plugin-composite`. If you wish to install only as a plugin to the sf command line you can do so as such:
+
+```sh
+sf plugins install sf-plugin-composite
+```
 
 # Usage
 
@@ -19,5 +25,14 @@ The Salesforce Composite API is an invaluable tool for loading complex data acro
 ## API
 
 ```js
-const ent = require('sf-entish');
+const Ent = require('sf-entish');
+
+// constructor accepts an authorized jsforce Connection instance; 
+// otherwise, either of (1) $SFUNAME and $SFPWD or (2) $SFSID are required to be present as shell variables
+const ent = new Ent();
+// all ent methods are chainable and return a Promise that resolves to an instance of RequestBuilder or Ent
+await ent 
+    .generate()
+    .query('select id from recordType where sobjectType = \'Account\' and developerName = \'consumer\'')
+    .sobject('Account').insert()
 ```
