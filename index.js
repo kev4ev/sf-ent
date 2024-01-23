@@ -69,7 +69,7 @@ async function init(opts, connection){
             },
             {
                 message: 'Enter username',
-                type: 'password',
+                type: 'input',
                 name: 'uname',
                 skip: auth === s,
                 required: auth === u,
