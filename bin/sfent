@@ -1,7 +1,32 @@
 #! node
-const args = require('minimist')(process.argv.slice(2));
-// const ent = require('../index');
+const parser = require('minimist');
+const ent = require('../index');
 
-(()=>{
-    console.log(args);
+(async ()=>{
+    let alias = {}, defaults = {};
+    Object.entries(ent.flagConfig).forEach(entry => {
+        if(entry){
+            const [ key, val ] = entry;
+            alias[key] = val.name;
+            defaults[val.name] = val.default;
+        }
+    })
+    
+    try{
+        const opts = parser(process.argv.slice(2), {
+            alias, 
+            default: defaults
+        });
+        opts.interactive = true; // always true from CLI
+        const Ent = await ent(opts);
+        // first positional arg must be the sub-command
+        const cmd = opts._;
+        if(!cmd) throw new Error(`${cmd} is not a valid command. Must be one of ${Ent.commands.join(', ')}`);
+
+        // call the command
+        delete opts._;
+        await Ent[cmd](opts);
+    } catch(err){
+        console.error(err.message);
+    }
 })();
