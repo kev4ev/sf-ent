@@ -4,7 +4,8 @@
   "description": "A declarative interface for working with the Salesforce Composite API",
   "main": "index.js",
   "scripts": {
-    "test:cli": "node --inspect-brk bin/sfent -- "
+    "test:cli": "node --inspect-brk bin/sfent -- ",
+    "test:ent": "node --inspect-brk index.test.js -- "
   },
   "author": "",
   "license": "MIT",
