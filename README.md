@@ -20,9 +20,11 @@ sf plugins install sf-plugin-composite
 
 # Usage
 
-## Command Line
+Usage from the command line and through a script are very similar. Commands and subcommands for each have the same names. The primary difference is that when used as a library, all arguments must be provided to each command upon invocation. From the command-line, the user will be prompted for all responses, though top-level commands may support flags. 
 
-## API
+The following shows an example of using the `generate` command to create a composite API request file with a single `query` subrequest:
+
+Within a **script**...
 
 ```js
 const Ent = require('sf-entish');
@@ -32,7 +34,15 @@ const Ent = require('sf-entish');
 const ent = new Ent();
 // all ent methods are chainable and return a Promise that resolves to an instance of RequestBuilder or Ent
 await ent 
-    .generate()
-    .query('select id from recordType where sobjectType = \'Account\' and developerName = \'consumer\'')
-    .sobject('Account').insert()
+    .generate({ out: './query.json' })
+        .query('select id from recordType where sobjectType = \'Account\' and developerName = \'consumer\'')
+        .endCommand()
+    .finish();
+```
+
+From the **command line**...
+
+```sh
+$ sfent generate --out ./query.json 
+$ # user will be prompted to provide query and create the request file
 ```

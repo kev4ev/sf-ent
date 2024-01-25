@@ -1,110 +1,134 @@
-const { generate } = require('./lib/commands');
+const commands = require('./lib/commands');
+const Command = require('./lib/types/Command');
 const { Connection } = require('jsforce');
 
-class Ent {
+// parse .env file for interested keys; preferencing those set directly in the shell
+require('dotenv').config({ override: false });
+const { SFSID, SFUNAME, SFPWD, SFURL } = process.env;
+
+class Ent extends Command{
     /**
-     * @param {EntOptions} opts 
      * @param {Connection} connection 
+     * @param {import('./lib/types/Diviner').DivinerArgs} args 
      */
-    constructor(opts, connection){
-        this.opts = opts;
-        this.connection = connection;
-        // add all commands as instance methods
-        this.generate = generate;
+    constructor(connection, args){
+        super(connection, args);
+        // wrap all commands as instance methods that ensure auth first
+        Object.entries(commands).forEach(entry => {
+            if(entry){
+                const [ key, fn ] = entry;
+                this[key] = async (args) => {
+                    await this.run();
+                    await this[key](this.connection, Object.assign(this.args, args));
+                }
+            }
+        });
     }
 
-    /** @returns {Array<string>} */
-    get commands(){
-        return Object.values(this).filter(prop => typeof prop === 'function').map(fn => fn.name);
-    }
-}
-
-/**
- * 
- * @param {EntOptions} opts 
- * @param {Connection} connection 
- * @returns {Ent}
- */
-async function init(opts, connection){
-    if(!connection || !connection.accessToken){
-        if(!opts.interactive){
-            throw new Error('An authorized JSForce Connection must be provided');
+    /** @returns {import('./lib/types/Command').CommandFlagConfig} */
+    static get flagConfig(){
+        return {
+            interactive: {
+                alias: 'i'
+            }
         }
-        // prompt user for auth info
-        const { prompt } = require('enquirer');
+    }
+
+    async readyToExecute(){
+        return this.connection && this?.connection?.accessToken ? true : 'Authorized JSForce Connection required';
+    }
+
+    async *getPrompts(){
+        // prompt user for auth info when missing
         const authOpts = {
             s: 'sessionId',
             u: 'username/password'
         };
         const { s, u } = authOpts;
 
-        // use shell variables for defaults
-        const { SFSID, SFUNAME, SFPWD, SFURL } = process.env;
-
-        const { auth, instanceUrl } = await prompt([
+        // first prompt to get/confirm login url and auth type
+        yield [
             {
                 message: 'What is the login url?',
                 type: 'input',
                 initial: SFURL,
                 name: 'instanceUrl',
-                required: true
+                required: true,
             },
             {
                 message: 'Connect with sessionId or username/password?',
                 choices: Object.values(authOpts),
                 type: 'select',
-                name: 'auth',
+                name: 'authMethod',
                 required: true,
-                initial: s
+                initial: SFSID ? s : u
             }
-        ]); 
-        const { sid, uname, pwd } = await prompt([
+        ];
+
+        // get credentials
+        const { authMethod } = this;
+        yield [
             {
                 message: 'Enter session id',
-                type: 'password',
+                type: 'input',
                 name: 'sid',
-                skip: auth === u,
-                required: auth === s,
+                skip: authMethod === u,
+                required: authMethod === s,
                 initial: SFSID
             },
             {
                 message: 'Enter username',
                 type: 'input',
                 name: 'uname',
-                skip: auth === s,
-                required: auth === u,
+                skip: authMethod === s,
+                required: authMethod === u,
                 initial: SFUNAME
             },
             {
                 message: 'Enter password',
                 type: 'password',
                 name: 'pwd',
-                skip: auth === s,
-                required: auth === u,
+                skip: authMethod === s,
+                required: authMethod === u,
                 initial: SFPWD
             }
-        ]);
+        ];
 
-        // connect via jsforce
-        
+        // yield confirmation prompt to connect to sf
+        const { sid, uname, pwd, instanceUrl } = this;
+        yield [
+            {
+                message: 'Connect now?',
+                type: 'confirm',
+                name: 'connection',
+                required: true,
+                initial: 'Y',
+                onSubmit: async(name, value) => {
+                    if(!value) return undefined;
+                    // connect via jsforce
+                    let opts = { loginUrl: instanceUrl, instanceUrl };
+                    if(authMethod === s){
+                        opts.sessionId = sid;
+                        opts.accessToken = sid;
+                    }
+                    const conn = new Connection(opts);
+                    try{
+                        if(authMethod === s){
+                            await conn.identity(); // throws error if sessionId is invalid
+                        } else{
+                            await conn.loginBySoap(uname, pwd);
+                        }
+                    } catch(err){
+                        throw new Error('Could not authenticate using provided auth info');
+                    }
+
+                    // return the authorized connection
+                    return conn;
+                }
+            }
+        ]
+
     }
-
-    return new Ent(opts, connection);
 }
 
-/** mappings used when Ent is invoked via command-line (interactively) */
-init.flagConfig = {
-    'i': {
-        name: 'interactive',
-        default: false
-    }
-}
-
-module.exports = init;
-
-/** @typedef {import('jsforce').Connection} Connection */
-
-/**
- * @typedef {object} EntOptions 
- * @property {boolean} interactive when true, Ent will await user input for each node
- */
+module.exports = Ent;
