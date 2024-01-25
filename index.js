@@ -138,13 +138,12 @@ class Ent extends Command{
             {
                 message: 'Connect now?',
                 type: 'confirm',
-                name: 'connection',
+                name: 'connectNow',
                 required: true,
                 initial: 'Y',
                 onSubmit: async(name, value) => {
                     if(!value) return undefined;
-                    
-                    return await getConnection(instanceUrl, authMethod, sessionId, uname, pwd);
+                    this.connection = await getConnection(instanceUrl, authMethod, sessionId, uname, pwd);
                 }
             }
         ]
