@@ -1,11 +1,12 @@
-const commands = require('./lib/commands');
+const { eager } = require('./lib/commands');
 const Command = require('./lib/types/Command');
+const { eagerDiviner } = require('./lib/types/Diviner');
 const { Connection } = require('jsforce');
+const chalk = require('./lib/utils/chalk-cjs');
 
 // parse .env file for interested keys; preferencing those set directly in the shell
 require('dotenv').config({ override: false });
 const { SFSID, SFUNAME, SFPWD, SFURL } = process.env;
-
 const AUTH_OPTS = {
     session: 'sessionId',
     uname: 'username/password'
@@ -35,8 +36,6 @@ async function getConnection(
             await conn.loginBySoap(uname, pwd);
         }
     } catch(err){
-        console.error('Could not authenticate using provided auth info');
-
         return undefined;
     }
 
@@ -46,37 +45,32 @@ async function getConnection(
 
 class Ent extends Command{
     /**
-     * @param {Connection} connection 
-     * @param {import('./lib/types/Diviner').DivinerArgs} args 
+     * @param {import('./lib/types/Command').CommandArgs} args
+     * @param {string} [topCmd] should only provided when invoked from command line
      */
-    constructor(connection, args){
-        super(connection, args);
-        // wrap all commands as instance methods that ensure auth first
-        Object.entries(commands).forEach(entry => {
-            if(entry){
-                const [ key, fn ] = entry;
-                this[key] = async (args) => {
-                    await this.run();
-                    await fn(this.connection, Object.assign(this.args, args));
-                }
-            }
-        });
+    constructor(args, topCmd){
+        super(args);
+        this.topCmd = topCmd;
     }
 
-    /** @returns {import('./lib/types/Command').CommandFlagConfig} */
+    /** @returns {import('./lib/types/CommandFlagConfig').FlagConfig} */
     static get flagConfig(){
         return {
             interactive: {
-                alias: 'i'
+                alias: 'i',
+                initial: false
             }
         }
     }
 
     /** Establishes connection in non-interactive mode when env vars are present */
     async preRun(){
+        // check connection
         if(!this?.connection?.accessToken && !this?.args?.interactive){
             this.connection = await getConnection();
         }
+        // init chalk
+        this.chalk = await chalk();
     }
 
     async readyToExecute(){
@@ -85,7 +79,8 @@ class Ent extends Command{
 
     async *getPrompts(){
         // first prompt to get/confirm login url and auth type
-        yield [
+        /** @type {Array<import('./lib/types/Diviner').Question>} */
+        let prompts = [
             {
                 message: 'What is the login url?',
                 type: 'input',
@@ -102,10 +97,11 @@ class Ent extends Command{
                 initial: SFSID ? AUTH_OPTS.session : AUTH_OPTS.uname
             }
         ];
+        yield prompts;
 
         // get credentials
         const { authMethod } = this;
-        yield [
+        prompts = [
             {
                 message: 'Enter session id',
                 type: 'input',
@@ -131,10 +127,11 @@ class Ent extends Command{
                 initial: SFPWD
             }
         ];
+        yield prompts;
 
         // yield confirmation prompt to connect to sf
         const { sessionId, uname, pwd, instanceUrl } = this;
-        yield [
+        prompts = [
             {
                 message: 'Connect now?',
                 type: 'confirm',
@@ -143,13 +140,53 @@ class Ent extends Command{
                 initial: 'Y',
                 onSubmit: async(name, value) => {
                     if(!value) return undefined;
-                    this.connection = await getConnection(instanceUrl, authMethod, sessionId, uname, pwd);
+                    const conn = await getConnection(instanceUrl, authMethod, sessionId, uname, pwd);
+                    if(!conn){
+                        console.error(this.chalk.bgRed(`Could not authenticate with provided ${authMethod === AUTH_OPTS.session ? 'sessionId' : 'username/password'}`));
+
+                        process.exit(1);
+                    }
+
+                    this.connection = conn;
                 }
             }
-        ]
+        ];
+        yield prompts;
+
+        if(!this.topCmd){
+            prompts = [
+                {
+                    name: 'topCmd',
+                    type: 'select',
+                    required: true,
+                    skip: this.topCmd,
+                    choices: Object.keys(eager),
+                    message: 'Select command to execute'
+                }
+            ];
+            yield prompts;
+        }
     }
 
-    async execute(){ /** empty for Ent */ }
+    async execute(){
+        const { topCmd } = this;
+        if(topCmd){
+            return await eager[topCmd](this.args);
+        }
+    }
 }
 
-module.exports = Ent;
+/**
+ * 
+ * @param {import('./lib/types/Command').CommandArgs} args 
+ * @param {string} topCmd if provided, the top-level command to run
+ */
+async function eagerEnt(args, topCmd){
+    const ent = eagerDiviner(Ent);
+
+    return await ent(args, topCmd);
+}
+module.exports = {
+    ent: eagerEnt,
+    Ent
+}

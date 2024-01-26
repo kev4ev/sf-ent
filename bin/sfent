@@ -1,6 +1,6 @@
 #! node
 const parser = require('minimist');
-const Ent = require('../index');
+const { ent, Ent } = require('../index');
 
 (async ()=>{
     let aliases = {}, defaults = {};
@@ -14,22 +14,19 @@ const Ent = require('../index');
     })
     
     try{
+        // parse flags
         const opts = parser(process.argv.slice(2), {
             alias: aliases, 
             default: defaults
         });
         opts.interactive = true; // always true from CLI
-        const ent = new Ent(undefined, opts);
-
-        // ensure first positional arg is a valid command
+        // get first positional arg (top-level cmd)
         let cmd = opts._;
-        if(!cmd) throw new Error('Subcommand must be provided');
-        if(!ent[cmd]) throw new Error(`${cmd} is not a valid command. Must be one of ${Ent.commands.join(', ')}`);
         cmd = ent[cmd];
-
+        
         // call the command with the provided flags (args)
         delete opts._;
-        await cmd(opts);
+        await ent(opts, cmd);
     } catch(err){
         console.error(err.message);
     }
