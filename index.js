@@ -2,7 +2,6 @@ const { eager } = require('./lib/commands');
 const Command = require('./lib/types/Command');
 const { eagerDiviner } = require('./lib/types/Diviner');
 const { Connection } = require('jsforce');
-const chalk = require('./lib/utils/chalk-cjs');
 
 // parse .env file for interested keys; preferencing those set directly in the shell
 require('dotenv').config({ override: false });
@@ -46,22 +45,15 @@ async function getConnection(
 class Ent extends Command{
     /**
      * @param {import('./lib/types/Command').CommandArgs} args
+     * @param {import('jsforce').Connection} [connection]
      * @param {string} [topCmd] should only provided when invoked from command line
      */
-    constructor(args, topCmd){
-        super(args);
+    constructor(args, connection, topCmd){
+        super(args, connection);
         this.topCmd = topCmd;
     }
 
-    /** @returns {import('./lib/types/CommandFlagConfig').FlagConfig} */
-    static get flagConfig(){
-        return {
-            interactive: {
-                alias: 'i',
-                initial: false
-            }
-        }
-    }
+    static get flagConfig(){ return Command.flagConfig; }
 
     /** Establishes connection in non-interactive mode when env vars are present */
     async preRun(){
@@ -69,8 +61,6 @@ class Ent extends Command{
         if(!this?.connection?.accessToken && !this?.args?.interactive){
             this.connection = await getConnection();
         }
-        // init chalk
-        this.chalk = await chalk();
     }
 
     async readyToExecute(){
@@ -168,11 +158,19 @@ class Ent extends Command{
         }
     }
 
+    /**
+     * 
+     * @returns {Promise<any>}
+     */
     async execute(){
         const { topCmd } = this;
         if(topCmd){
-            return await eager[topCmd](this.args);
+            // interactive mode; relay control to top-level Command and pass connection
+            return await eager[topCmd](this.args, this.connection);
         }
+
+        // non-interactive, return top-level commands
+        return eager;
     }
 }
 
@@ -186,6 +184,7 @@ async function eagerEnt(args, topCmd){
 
     return await ent(args, topCmd);
 }
+
 module.exports = {
     ent: eagerEnt,
     Ent

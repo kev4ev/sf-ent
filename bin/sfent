@@ -3,13 +3,14 @@ const parser = require('minimist');
 const { ent, Ent } = require('../index');
 
 (async ()=>{
-    let aliases = {}, defaults = {};
+    let aliases = {}, defaults = {}, bools = [];
     Object.entries(Ent.flagConfig).forEach(entry => {
         if(entry){
             const [ key, val ] = entry;
-            const { alias, initial } = val;
+            const { alias, bool, initial } = val;
             if(alias) aliases[alias] = key;
             if(initial) defaults[key] = initial;
+            if(bool) bools.push(key);
         }
     })
     
@@ -17,16 +18,17 @@ const { ent, Ent } = require('../index');
         // parse flags
         const opts = parser(process.argv.slice(2), {
             alias: aliases, 
+            boolean: bools,
             default: defaults
         });
         opts.interactive = true; // always true from CLI
         // get first positional arg (top-level cmd)
         let cmd = opts._;
         cmd = ent[cmd];
+        delete opts._;
         
         // call the command with the provided flags (args)
-        delete opts._;
-        await ent(opts, cmd);
+        await ent(opts, undefined, cmd);
     } catch(err){
         console.error(err.message);
     }

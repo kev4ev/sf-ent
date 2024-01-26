@@ -1,9 +1,6 @@
-const Ent = require('./index.js');
+const { ent } = require('./index.js');
 
 (async()=>{
-    const ent = new Ent()
-    await ent
-            .generate({ out: './output.json' })
-        
-        
+    (await ent())
+        .generate()
 })();
