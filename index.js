@@ -172,7 +172,7 @@ class Ent extends Command{
         }
 
         // non-interactive, Ent itself does not resolve a value
-        return eager;
+        return 'entDone';
     }
 
     getSubDiviners(){

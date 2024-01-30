@@ -4,11 +4,11 @@ const { ent } = require('./index.js');
     const Ent = ent();
     Ent
         .generate()
-            // .query('the query')
-            // .query('another query')
-            // .finish();
+        // .query('the query')
+        // .query('another query')
+        // .finish();
 
-    await ent;
+    const result = await Ent;
 
     debugger; 
 })();
