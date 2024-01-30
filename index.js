@@ -52,6 +52,7 @@ class Ent extends Command{
         this.topCmd = topCmd;
     }
 
+    /** @returns {import('./lib/types/CommandFlagConfig').FlagConfig} */
     static get flagConfig(){ return Command.flagConfig; }
 
     /** Establishes connection in non-interactive mode when env vars are present */
@@ -197,5 +198,5 @@ function initEnt(args={}, topCmd){
 
 module.exports = {
     ent: initEnt,
-    Ent
+    flagConfig: Ent.flagConfig
 }
