@@ -1,6 +1,12 @@
 const { ent } = require('./index.js');
 
 (async()=>{
-    (await ent())
-        
+    const ent = ent();
+    ent
+        .generate()
+            .query('the query')
+            .query('another query')
+            .finish();
+
+    await ent;
 })();

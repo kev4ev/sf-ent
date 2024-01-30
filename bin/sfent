@@ -24,11 +24,10 @@ const { ent, Ent } = require('../index');
         opts.interactive = true; // always true from CLI
         // get first positional arg (top-level cmd)
         let cmd = opts._;
-        cmd = ent[cmd];
         delete opts._;
         
         // call the command with the provided flags (args)
-        await ent(opts, undefined, cmd);
+        await ent(opts, cmd);
     } catch(err){
         console.error(err.message);
     }

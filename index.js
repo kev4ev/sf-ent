@@ -1,7 +1,7 @@
-const { eager } = require('./lib/commands');
+const commands = require('./lib/commands');
 const Command = require('./lib/types/Command');
-const { eagerDiviner } = require('./lib/types/Diviner');
 const { Connection } = require('jsforce');
+const divine = require('./lib/types/DivinerPromise');
 
 // parse .env file for interested keys; preferencing those set directly in the shell
 require('dotenv').config({ override: false });
@@ -150,7 +150,7 @@ class Ent extends Command{
                     type: 'select',
                     required: true,
                     skip: this.topCmd,
-                    choices: Object.keys(eager),
+                    choices: Object.keys(this.getSubDiviners()),
                     message: 'Select command to execute'
                 }
             ];
@@ -166,11 +166,21 @@ class Ent extends Command{
         const { topCmd } = this;
         if(topCmd){
             // interactive mode; relay control to top-level Command and pass connection
-            return await eager[topCmd](this.args, this.connection);
+            const relay = commands[topCmd](this.args, this.connection);
+
+            return await relay.run();
         }
 
-        // non-interactive, return top-level commands
+        // non-interactive, Ent itself does not resolve a value
         return eager;
+    }
+
+    getSubDiviners(){
+        return commands;
+    }
+
+    async handleSubDivinerEvent(evt, payload){
+        debugger;
     }
 }
 
@@ -178,14 +188,15 @@ class Ent extends Command{
  * 
  * @param {import('./lib/types/Command').CommandArgs} args 
  * @param {string} topCmd if provided, the top-level command to run
+ * @returns {DivinerPromise}
  */
-async function eagerEnt(args, topCmd){
-    const ent = eagerDiviner(Ent);
+function initEnt(args, topCmd){
+    const ent = new Ent(args, undefined, topCmd);
 
-    return await ent(args, topCmd);
+    return divine(ent);
 }
 
 module.exports = {
-    ent: eagerEnt,
+    ent: initEnt,
     Ent
 }
