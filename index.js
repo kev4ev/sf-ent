@@ -45,11 +45,10 @@ async function getConnection(
 class Ent extends Command{
     /**
      * @param {import('./lib/types/Command').CommandArgs} args
-     * @param {import('jsforce').Connection} [connection]
      * @param {string} [topCmd] should only provided when invoked from command line
      */
-    constructor(args, connection, topCmd){
-        super(args, connection);
+    constructor(args, topCmd){
+        super(args);
         this.topCmd = topCmd;
     }
 
@@ -190,7 +189,7 @@ class Ent extends Command{
  * @param {string} topCmd if provided, the top-level command to run
  * @returns {DivinerPromise}
  */
-function initEnt(args, topCmd){
+function initEnt(args={}, topCmd){
     const ent = new Ent(args, undefined, topCmd);
 
     return divine(ent);
