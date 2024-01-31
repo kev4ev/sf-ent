@@ -133,7 +133,7 @@ class Ent extends Command{
                     if(!value) return undefined;
                     const conn = await getConnection(instanceUrl, authMethod, sessionId, uname, pwd);
                     if(!conn){
-                        console.error(this.chalk.bgRed(`Could not authenticate with provided ${authMethod === AUTH_OPTS.session ? 'sessionId' : 'username/password'}`));
+                        this.log(this.chalk.bgRed(`Could not authenticate with provided ${authMethod === AUTH_OPTS.session ? 'sessionId' : 'username/password'}`));
 
                         process.exit(1);
                     }
