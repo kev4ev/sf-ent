@@ -59,6 +59,7 @@ class Ent extends Command{
     async preRun(){
         // check connection
         if(!this?.connection?.accessToken && !this?.args?.interactive){
+            this.log('No active JSForceConnection, attempting connection with available env vars');
             this.connection = await getConnection();
         }
     }
