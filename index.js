@@ -50,6 +50,10 @@ class Ent extends Command{
     constructor(args, topCmd){
         super(args);
         this.topCmd = topCmd;
+        if(!args.connection || !args?.connection?.accessToken){
+            // assign the Promise during construction so that all relayed Diviners get connection as well
+            this.args.connection = getConnection();
+        }
     }
 
     /** @returns {import('./lib/types/CommandFlagConfig').FlagConfig} */
@@ -57,11 +61,7 @@ class Ent extends Command{
 
     /** Establishes connection in non-interactive mode when env vars are present */
     async preRun(){
-        // check connection
-        if(!this?.connection?.accessToken && !this?.args?.interactive){
-            this.log('No active JSForceConnection, attempting connection with available env vars');
-            this.connection = await getConnection();
-        }
+        this.connection = await this.args.connection;
     }
 
     async readyToExecute(){
@@ -159,29 +159,41 @@ class Ent extends Command{
         }
     }
 
+    getSubDiviners(){
+        return commands;
+    }
+
     /**
-     * 
-     * @returns {Promise<any>}
+     * shadows default Command.execute() so that it can begin relay in interactive mode
      */
     async execute(){
         const { topCmd } = this;
         if(topCmd){
             // interactive mode; relay control to top-level Command and pass connection
-            const relay = commands[topCmd](this.args, this.connection);
+            const relay = commands[topCmd](this.args);
 
             return await relay.run();
         }
 
-        // non-interactive, Ent itself does not resolve a value
-        return 'entDone';
+        // non-interactive, default logic
+        return super.execute();
     }
 
-    getSubDiviners(){
-        return commands;
-    }
-
+    /**
+     * 
+     * @param {string} evt 'called' or 'done'
+     * @param {string} payload result of cmd execution
+     */
     async handleSubDivinerEvent(evt, payload){
-        debugger;
+        if(evt !== 'called'){
+            await this.done(payload, evt === 'error' ? true : false)
+        }
+    }
+
+    async done(cmdResult, isErr){
+        if(isErr) return this.doneRejecter = cmdResult;
+
+        this.doneResolver = cmdResult;
     }
 }
 

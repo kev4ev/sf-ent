@@ -4,8 +4,8 @@
   "description": "A declarative interface for working with the Salesforce Composite API",
   "main": "index.js",
   "scripts": {
-    "test:cli": "node --inspect-brk bin/sfent -- ",
-    "test:lib": "node --inspect-brk index.test.js -- ",
+    "debug:cli": "DEBUG='sf-entish*' node --inspect-brk bin/sfent -- ",
+    "debug:lib": "DEBUG='sf-entish*' node --inspect-brk index.test.js -- ",
     "test": "node --inspect-brk ./lib/types/DivinerPromise.test.js"
   },
   "author": "",

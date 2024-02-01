@@ -1,14 +1,12 @@
 const { ent } = require('./index.js');
 
 (async()=>{
-    const Ent = ent();
-    Ent
+    const result = 
+    await ent()
         .generate()
-        // .query('the query')
-        // .query('another query')
-        // .finish();
-
-    const result = await Ent;
+            .query({ query: 'SELECT Id FROM Case LIMIT 5' })
+            // .query('another query')
+            .done();
 
     debugger; 
 })();
