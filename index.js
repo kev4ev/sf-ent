@@ -58,15 +58,15 @@ class Ent extends Command{
         const { topCmd } = this;
         // interactive mode; relay control to top-level Command and pass connection
         if(topCmd){
-            /** @type {import('./lib/types/Command')} */
-            const cmd = commands[topCmd](this.args);
+            const cmdWrapper = commands[topCmd];
             // if cmd requires a JSForceConnection, establish and await it
-            if(cmd.requiresConnection && !this._hasAuthConnection()){
+            if(cmdWrapper.requiresConnection && !this._hasAuthConnection()){
                 const conn = await connect(this.args).run();
                 this._connResolver(conn);
             }
 
-            return await cmd.run();
+            // return relay so that this will be registered as parent and cmd's lifecycle events will be fired to handler
+            return await this.relayInteractive(cmdWrapper);
         }
 
         throw new Error('Command could not be inferred');
