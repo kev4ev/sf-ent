@@ -1,46 +1,7 @@
 const commands = require('./lib/commands');
 const Command = require('./lib/types/Command');
-const { Connection } = require('jsforce');
 const divine = require('./lib/types/DivinerPromise');
-
-// parse .env file for interested keys; preferencing those set directly in the shell
-require('dotenv').config({ override: false });
-const { SFSID, SFUNAME, SFPWD, SFURL } = process.env;
-const AUTH_OPTS = {
-    session: 'sessionId',
-    uname: 'username/password'
-};
-
-/**
- * @returns {Promise<Connection>}
- */
-async function getConnection(
-    instanceUrl=SFURL, 
-    authMethod=(SFSID ? AUTH_OPTS.session : AUTH_OPTS.uname), 
-    sessionId=SFSID, 
-    uname=SFUNAME, 
-    pwd=SFPWD)
-{
-    // connect via jsforce
-    let opts = { loginUrl: instanceUrl, instanceUrl };
-    if(authMethod === AUTH_OPTS.session){
-        opts.sessionId = sessionId;
-        opts.accessToken = sessionId;
-    }
-    const conn = new Connection(opts);
-    try{
-        if(authMethod === AUTH_OPTS.session){
-            await conn.identity(); // throws error if sessionId is invalid
-        } else{
-            await conn.loginBySoap(uname, pwd);
-        }
-    } catch(err){
-        return undefined;
-    }
-
-    // return the authorized connection
-    return conn;
-}
+const connect = require('./lib/utils/diviners/Connect');
 
 class Ent extends Command{
     /**
@@ -50,141 +11,80 @@ class Ent extends Command{
     constructor(args, topCmd){
         super(args);
         this.topCmd = topCmd;
-        if(!args.connection || !args?.connection?.accessToken){
-            // assign the Promise during construction so that all relayed Diviners get connection as well
-            this.args.connection = getConnection();
+        Object.defineProperties(this, {
+            _hasAuthConnection: {
+                value: () => this.args.connection && this.args?.connection?.accessToken
+            }
+        });
+        // if there is not an authorized connection, add the Promise to the this.args so that
+        // relayed Diviners inherit it; it will be resolved by this class during execution
+        if(!this._hasAuthConnection()){
+            let resolver, rejecter;
+            const connPromise = new Promise((res, rej) => {
+                resolver = res;
+                rejecter = rej;
+            });
+            this.args.connection = connPromise;
+            Object.defineProperties(this, {
+                _connResolver: { value: resolver },
+                _connRejecter: { value: rejecter }
+            });
         }
     }
 
     /** @returns {import('./lib/types/CommandFlagConfig').FlagConfig} */
     static get flagConfig(){ return Command.flagConfig; }
 
-    /** Establishes connection in non-interactive mode when env vars are present */
-    async preRun(){
-        this.connection = await this.args.connection;
-    }
-
-    async readyToExecute(){
-        return this.connection && this?.connection?.accessToken ? true : 'Authorized JSForce Connection required';
-    }
-
-    async *getPrompts(){
-        // first prompt to get/confirm login url and auth type
-        /** @type {Array<import('./lib/types/Diviner').Question>} */
-        let prompts = [
-            {
-                message: 'What is the login url?',
-                type: 'input',
-                initial: SFURL,
-                name: 'instanceUrl',
-                required: true,
-            },
-            {
-                message: 'Connect with sessionId or username/password?',
-                choices: Object.values(AUTH_OPTS),
-                type: 'select',
-                name: 'authMethod',
-                required: true,
-                initial: SFSID ? AUTH_OPTS.session : AUTH_OPTS.uname
-            }
-        ];
-        yield prompts;
-
-        // get credentials
-        const { authMethod } = this;
-        prompts = [
-            {
-                message: 'Enter session id',
-                type: 'input',
-                name: 'sessionId',
-                skip: authMethod === AUTH_OPTS.uname,
-                required: authMethod === AUTH_OPTS.session,
-                initial: SFSID
-            },
-            {
-                message: 'Enter username',
-                type: 'input',
-                name: 'uname',
-                skip: authMethod === AUTH_OPTS.session,
-                required: authMethod === AUTH_OPTS.uname,
-                initial: SFUNAME
-            },
-            {
-                message: 'Enter password',
-                type: 'password',
-                name: 'pwd',
-                skip: authMethod === AUTH_OPTS.session,
-                required: authMethod === AUTH_OPTS.uname,
-                initial: SFPWD
-            }
-        ];
-        yield prompts;
-
-        // yield confirmation prompt to connect to sf
-        const { sessionId, uname, pwd, instanceUrl } = this;
-        prompts = [
-            {
-                message: 'Connect now?',
-                type: 'confirm',
-                name: 'connectNow',
-                required: true,
-                initial: 'Y',
-                onSubmit: async(name, value) => {
-                    if(!value) return undefined;
-                    const conn = await getConnection(instanceUrl, authMethod, sessionId, uname, pwd);
-                    if(!conn){
-                        this.log(this.chalk.bgRed(`Could not authenticate with provided ${authMethod === AUTH_OPTS.session ? 'sessionId' : 'username/password'}`));
-
-                        process.exit(1);
-                    }
-
-                    this.connection = conn;
-                }
-            }
-        ];
-        yield prompts;
-
-        if(!this.topCmd){
-            prompts = [
-                {
-                    name: 'topCmd',
-                    type: 'select',
-                    required: true,
-                    skip: this.topCmd,
-                    choices: Object.keys(this.getSubDiviners()),
-                    message: 'Select command to execute'
-                }
-            ];
-            yield prompts;
-        }
-    }
-
     getSubDiviners(){
         return commands;
     }
+    
+    async readyToExecute(){ return this.topCmd ? true : 'User must provide top-level command' }  
 
-    /**
-     * shadows default Command.execute() so that it can begin relay in interactive mode
-     */
-    async execute(){
+    async *getPrompts(){
+        yield [
+            {
+                name: 'topCmd',
+                type: 'select',
+                required: true,
+                skip: this.topCmd,
+                choices: Object.keys(this.getSubDiviners()),
+                message: 'Select command to execute'
+            }
+        ];
+    }
+
+    async executeInteractive(){
         const { topCmd } = this;
+        // interactive mode; relay control to top-level Command and pass connection
         if(topCmd){
-            // interactive mode; relay control to top-level Command and pass connection
-            const relay = commands[topCmd](this.args);
+            /** @type {import('./lib/types/Command')} */
+            const cmd = commands[topCmd](this.args);
+            // if cmd requires a JSForceConnection, establish and await it
+            if(cmd.requiresConnection && !this._hasAuthConnection()){
+                const conn = await connect(this.args).run();
+                this._connResolver(conn);
+            }
 
-            return await relay.run();
+            return await cmd.run();
         }
 
-        // non-interactive, default logic
-        return super.execute();
+        throw new Error('Command could not be inferred');
     }
 
     /**
      * 
      * @param {string} evt 'called' or 'done'
      * @param {string} payload result of cmd execution
+     * @param {import('./lib/types/Command')} cmd
      */
-    async handleSubDivinerEvent(evt, payload){
+    async handleSubDivinerEvent(evt, payload, cmd){
+        // make sure there is an authorized connection for cmds that need it prior to their execution
+        if(evt === 'called' && cmd.requiresConnection && !this._hasAuthConnection()){
+            const conn = await connect(this.args).run();
+            this._connResolver(conn);
+        }
+
         if(evt !== 'called'){
             await this.done(payload, evt === 'error' ? true : false)
         }
