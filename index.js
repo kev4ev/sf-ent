@@ -38,10 +38,6 @@ class Ent extends Command{
     getSubDiviners(){
         return commands;
     }
-    
-    async readyToExecute(){ 
-        return this.topCmd || !this.args.interactive ? true : 'User must provide top-level command';
-    }  
 
     async *getPrompts(){
         yield [
@@ -55,6 +51,10 @@ class Ent extends Command{
             }
         ];
     }
+
+    async readyToExecute(){ 
+        return this.topCmd || !this.args.interactive ? true : 'User must provide top-level command';
+    }  
 
     async executeInteractive(){
         const { topCmd } = this;
