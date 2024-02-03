@@ -39,7 +39,9 @@ class Ent extends Command{
         return commands;
     }
     
-    async readyToExecute(){ return this.topCmd ? true : 'User must provide top-level command' }  
+    async readyToExecute(){ 
+        return this.topCmd || !this.args.interactive ? true : 'User must provide top-level command';
+    }  
 
     async *getPrompts(){
         yield [
