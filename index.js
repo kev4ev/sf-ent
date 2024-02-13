@@ -1,6 +1,6 @@
 const commands = require('./lib/commands');
 const Command = require('./lib/types/Command');
-const divine = require('./lib/types/DivinerPromise');
+const relay = require('./lib/types/DivinerPromise');
 const connect = require('./lib/utils/diviners/Connect');
 
 class Ent extends Command{
@@ -112,7 +112,7 @@ class Ent extends Command{
 function initEnt(args={}, topCmd){
     const ent = new Ent(args, undefined, topCmd);
 
-    return divine(ent);
+    return relay(ent);
 }
 
 module.exports = {
