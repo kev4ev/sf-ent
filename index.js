@@ -81,21 +81,25 @@ class Ent extends Command{
      * @param {import('./lib/types/Command')} cmd
      */
     async handleSubDivinerEvent(evt, payload, cmd){
+        const isConnect = Object.getPrototypeOf(cmd).constructor.name === 'Connect';
         // make sure there is an authorized connection for cmds that need it prior to their execution
         if(evt === 'called' && cmd.requiresConnection && !this._hasAuthConnection()){
-            const conn = await connect(this.args).run();
-            this._connResolver(conn);
+            await this.relayInteractive(connect);
         }
 
-        if(evt !== 'called'){
+        if(evt === 'done' && isConnect){
+            this._connResolver(payload);
+        }
+
+        if(evt !== 'called' && !isConnect){
             await this.done(payload, evt === 'error' ? true : false)
         }
     }
 
     async done(cmdResult, isErr){
-        if(isErr) return this.doneRejecter = cmdResult;
+        if(isErr) return this.doneRejecter(cmdResult);
 
-        this.doneResolver = cmdResult;
+        this.doneResolver(cmdResult);
     }
 }
 

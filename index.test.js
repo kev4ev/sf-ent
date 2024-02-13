@@ -9,5 +9,7 @@ const { ent } = require('./index.js');
 
     await result;
 
+    console.log('here');
+
     debugger;
 })();
