@@ -92,6 +92,8 @@ class Ent extends Command{
         }
 
         if(evt !== 'called' && !isConnect){
+            // Ent is a special instance of Command that must set #_done internally as it will never be called externally
+            this._done = true; 
             await this.done(payload, evt === 'error' ? true : false)
         }
     }
