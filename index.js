@@ -68,7 +68,7 @@ class Ent extends Command{
             }
 
             // return relay so that this will be registered as parent and cmd's lifecycle events will be fired to handler
-            return await this.relayInteractive(cmdWrapper);
+            return await this.relay(cmdWrapper);
         }
 
         throw new Error('Command could not be inferred');
@@ -84,7 +84,7 @@ class Ent extends Command{
         const isConnect = Object.getPrototypeOf(cmd).constructor.name === 'Connect';
         // make sure there is an authorized connection for cmds that need it prior to their execution
         if(evt === 'called' && cmd.requiresConnection && !this._hasAuthConnection()){
-            await this.relayInteractive(connect);
+            await this.relay(connect);
         }
 
         if(evt === 'done' && isConnect){
