@@ -1,6 +1,7 @@
 const { ent } = require('./index.js');
 
 (async()=>{
+    // chain style
     const result0 = 
         await ent()
             .generate({ out: './' })
@@ -10,6 +11,7 @@ const { ent } = require('./index.js');
 
     debugger;
 
+    // intermediate style
     const intermediate = ent().generate({ out: './' });
     const result1 = intermediate.query({ query: 'SELECT Id FROM Case LIMIT 5' }).done();
 
