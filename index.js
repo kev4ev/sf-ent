@@ -53,19 +53,16 @@ class Ent extends Command{
     }
 
     async readyToExecute(){ 
-        return this.topCmd || !this.args.interactive ? true : 'User must provide top-level command';
+        return !this.args.interactive || this.args.topCmd ? true : 'User must provide top-level command';
     }  
 
     async executeInteractive(){
-        const { topCmd } = this;
+        const { topCmd } = this.args;
         // interactive mode; relay control to top-level Command and pass connection
         if(topCmd){
             const cmdWrapper = commands[topCmd];
             // if cmd requires a JSForceConnection, establish and await it
-            if(cmdWrapper.requiresConnection && !this._hasAuthConnection()){
-                const conn = await connect(this.args).run();
-                this._connResolver(conn);
-            }
+            if(cmdWrapper.requiresConnection && !this._hasAuthConnection()) await this.relay(connect);
 
             // return relay so that this will be registered as parent and cmd's lifecycle events will be fired to handler
             return await this.relay(cmdWrapper);
