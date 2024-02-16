@@ -1,9 +1,15 @@
-<mxfile host="app.diagrams.net" modified="2024-02-15T17:20:25.983Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" etag="t5Jq3n2lgBbaM23liUuF" version="23.1.4" type="device">
+<mxfile host="app.diagrams.net" modified="2024-02-16T19:49:14.924Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" etag="S94Vw2LuODpVYrIXkJry" version="23.1.4" type="device">
   <diagram name="Page-1" id="13e1069c-82ec-6db2-03f1-153e76fe0fe0">
-    <mxGraphModel dx="1325" dy="721" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1700" pageHeight="1100" background="none" math="0" shadow="0">
+    <mxGraphModel dx="1937" dy="1054" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1700" pageHeight="1100" background="none" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="Kui3dBX7CGbU3PAof87k-39" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.01;entryY=0.17;entryDx=0;entryDy=0;entryPerimeter=0;dashed=1;exitX=1;exitY=0;exitDx=0;exitDy=5;exitPerimeter=0;" edge="1" parent="1" source="Kui3dBX7CGbU3PAof87k-32" target="Kui3dBX7CGbU3PAof87k-38">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="640" y="230" as="sourcePoint" />
+            <mxPoint x="645" y="330" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
         <mxCell id="7baba1c4bc27f4b0-2" value="./index.js" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;rounded=1;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;align=center;" parent="1" vertex="1">
           <mxGeometry x="230" y="90" width="90" height="760" as="geometry" />
         </mxCell>
@@ -66,19 +72,8 @@
         <mxCell id="Kui3dBX7CGbU3PAof87k-7" value="DivinerPromise.js" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;rounded=1;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;align=center;" vertex="1" parent="1">
           <mxGeometry x="380" y="150" width="105" height="210" as="geometry" />
         </mxCell>
-        <mxCell id="Kui3dBX7CGbU3PAof87k-15" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" vertex="1" parent="Kui3dBX7CGbU3PAof87k-7">
-          <mxGeometry x="52.45" y="70" width="10" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="Kui3dBX7CGbU3PAof87k-22" value="rootDivinerPromise = DP" style="html=1;align=left;spacingLeft=2;endArrow=block;rounded=0;edgeStyle=orthogonalEdgeStyle;curved=0;rounded=0;exitX=1;exitY=0;exitDx=0;exitDy=5;exitPerimeter=0;verticalAlign=middle;" edge="1" parent="Kui3dBX7CGbU3PAof87k-7" source="Kui3dBX7CGbU3PAof87k-15" target="Kui3dBX7CGbU3PAof87k-15">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="104.95" y="110" as="sourcePoint" />
-            <Array as="points">
-              <mxPoint x="62" y="90" />
-              <mxPoint x="105" y="90" />
-              <mxPoint x="105" y="150" />
-            </Array>
-            <mxPoint x="104.95" y="150" as="targetPoint" />
-          </mxGeometry>
+        <mxCell id="Kui3dBX7CGbU3PAof87k-32" value="rootDivinerPromise = DP" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=top;spacingLeft=2;" vertex="1" parent="Kui3dBX7CGbU3PAof87k-7">
+          <mxGeometry x="47.5" y="80" width="10" height="70" as="geometry" />
         </mxCell>
         <mxCell id="Kui3dBX7CGbU3PAof87k-12" value="" style="endArrow=none;startArrow=none;endFill=0;startFill=0;endSize=8;html=1;verticalAlign=bottom;dashed=1;labelBackgroundColor=default;dashPattern=10 10;rounded=0;backgroundOutline=0;" edge="1" parent="1">
           <mxGeometry width="160" relative="1" as="geometry">
@@ -108,7 +103,10 @@
         <mxCell id="Kui3dBX7CGbU3PAof87k-23" value="&amp;lt;&amp;lt;extends Promise&amp;gt;&amp;gt;&lt;br&gt;:DivinerPromise" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;rounded=1;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;align=center;" vertex="1" parent="1">
           <mxGeometry x="640" y="150" width="110" height="210" as="geometry" />
         </mxCell>
-        <mxCell id="Kui3dBX7CGbU3PAof87k-26" value="new DivinerPromise(Ent, undefined)" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="Kui3dBX7CGbU3PAof87k-7" target="Kui3dBX7CGbU3PAof87k-23">
+        <mxCell id="Kui3dBX7CGbU3PAof87k-35" value="decorate self with&lt;br style=&quot;border-color: var(--border-color); font-size: 11px;&quot;&gt;&lt;span style=&quot;font-size: 11px; background-color: rgb(255, 255, 255);&quot;&gt;fn from hash; wrapping&lt;/span&gt;&lt;br style=&quot;border-color: var(--border-color); font-size: 11px;&quot;&gt;&lt;span style=&quot;font-size: 11px; background-color: rgb(255, 255, 255);&quot;&gt;each&lt;/span&gt;" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;spacingLeft=2;" vertex="1" parent="Kui3dBX7CGbU3PAof87k-23">
+          <mxGeometry x="50" y="140" width="10" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="Kui3dBX7CGbU3PAof87k-26" value="new DivinerPromise(executorFn, Ent, undefined)" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="Kui3dBX7CGbU3PAof87k-7" target="Kui3dBX7CGbU3PAof87k-23">
           <mxGeometry x="0.0023" width="50" height="50" relative="1" as="geometry">
             <mxPoint x="470" y="330" as="sourcePoint" />
             <mxPoint x="645" y="330" as="targetPoint" />
@@ -118,7 +116,7 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="Kui3dBX7CGbU3PAof87k-27" value=":DP" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="Kui3dBX7CGbU3PAof87k-23">
+        <mxCell id="Kui3dBX7CGbU3PAof87k-27" value=":DP" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="Kui3dBX7CGbU3PAof87k-23" target="Kui3dBX7CGbU3PAof87k-7">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="705" y="250" as="sourcePoint" />
             <mxPoint x="440" y="230" as="targetPoint" />
@@ -129,6 +127,25 @@
         </mxCell>
         <mxCell id="Kui3dBX7CGbU3PAof87k-28" value="&lt;br&gt;&lt;u&gt;DivinerPromise&lt;/u&gt;&lt;br&gt;* custom Promise extension that enables synchronous API via decoration&lt;br&gt;* decorated with the functions returned by getSubdivinerHash() call of &lt;br&gt;&amp;nbsp; Diviner it wraps&lt;br&gt;* when caller invokes those fn, if the result is another Diviner, another&amp;nbsp; &amp;nbsp; &amp;nbsp; DivinerPromise is returned via internal call to eagerRelay&lt;br&gt;*&amp;nbsp; relay continues until a called function returns undefined or non-Diviner object&lt;br&gt;* eagerRelay() calls the Diviner&#39;s run() fn, and passes to the Diviner the resolver and rejector functions for the DivinerPromise that wraps it (inversion of control)" style="strokeWidth=1;shadow=0;dashed=0;align=left;html=1;shape=mxgraph.mockup.text.stickyNote2;fontColor=#666666;mainText=;fontSize=11;whiteSpace=wrap;fillColor=#ffffcc;strokeColor=#F62E00;labelPosition=center;verticalLabelPosition=middle;verticalAlign=top;spacingTop=4;spacingRight=0;spacing=2;spacingLeft=20;" vertex="1" parent="1">
           <mxGeometry x="520" width="430" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="Kui3dBX7CGbU3PAof87k-30" value="extend(Ent.getSubdivinerHash())" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=1;exitDx=0;exitDy=-5;exitPerimeter=0;entryX=0;entryY=0;entryDx=0;entryDy=5;entryPerimeter=0;" edge="1" parent="1" source="Kui3dBX7CGbU3PAof87k-32" target="Kui3dBX7CGbU3PAof87k-35">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="460" y="280" as="sourcePoint" />
+            <mxPoint x="635" y="280" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Kui3dBX7CGbU3PAof87k-36" value=":DP" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="Kui3dBX7CGbU3PAof87k-23" target="Kui3dBX7CGbU3PAof87k-7">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="705" y="240" as="sourcePoint" />
+            <mxPoint x="442" y="240" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="580" y="320" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Kui3dBX7CGbU3PAof87k-38" value="&lt;br&gt;&lt;u&gt;executorFn&lt;/u&gt;&lt;br&gt;* every Promise must be constructed with an executorFn that is &quot;reachable&quot;&lt;br&gt;(cannot be changed after construction)&lt;br&gt;* executorFn wraps call to &lt;b&gt;Diviner.run()&lt;/b&gt;, and&amp;nbsp;&lt;br&gt;sets the wrapped Diviner&#39;s &lt;b&gt;runResolver,&amp;nbsp;&lt;br&gt;runRejector&lt;/b&gt;, and &lt;b&gt;parent&lt;/b&gt; attributes&lt;br&gt;* this allows resolution/rejection to be inverted,&amp;nbsp;&lt;br&gt;where the wrapped Diviner controls when the&amp;nbsp;&lt;br&gt;DivinerPromise that wraps it is fulfilled." style="strokeWidth=1;shadow=0;dashed=0;align=left;html=1;shape=mxgraph.mockup.text.stickyNote2;fontColor=#666666;mainText=;fontSize=11;whiteSpace=wrap;fillColor=#ffffcc;strokeColor=#F62E00;labelPosition=center;verticalLabelPosition=middle;verticalAlign=top;spacingTop=4;spacingRight=0;spacing=2;spacingLeft=20;points=[[0.01,0.17,0,0,0]];" vertex="1" parent="1">
+          <mxGeometry x="960" y="10" width="280" height="180" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

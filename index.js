@@ -1,11 +1,11 @@
 const commands = require('./lib/commands');
-const Command = require('./lib/types/Command');
-const relay = require('./lib/types/DivinerPromise');
+const Command = require('./lib/types/command/Command');
+const relay = require('./lib/types/command/DivinerPromise');
 const connect = require('./lib/utils/diviners/Connect');
 
 class Ent extends Command{
     /**
-     * @param {import('./lib/types/Command').CommandArgs} args
+     * @param {import('./lib/types/command/Command').CommandArgs} args
      * @param {string} [topCmd] should only provided when invoked from command line
      */
     constructor(args, topCmd){
@@ -32,7 +32,7 @@ class Ent extends Command{
         }
     }
 
-    /** @returns {import('./lib/types/CommandFlagConfig').FlagConfig} */
+    /** @returns {import('./lib/types/command/CommandFlagConfig').FlagConfig} */
     static get flagConfig(){ return Command.flagConfig; }
 
     getSubDiviners(){
@@ -75,7 +75,7 @@ class Ent extends Command{
      * 
      * @param {string} evt 'called' or 'done'
      * @param {string} payload result of cmd execution
-     * @param {import('./lib/types/Command')} cmd
+     * @param {import('./lib/types/command/Command')} cmd
      */
     async handleSubDivinerEvent(evt, payload, cmd){
         const isConnect = Object.getPrototypeOf(cmd).constructor.name === 'Connect';
@@ -100,7 +100,7 @@ class Ent extends Command{
 
 /**
  * 
- * @param {import('./lib/types/Command').CommandArgs} args 
+ * @param {import('./lib/types/command/Command').CommandArgs} args 
  * @param {string} topCmd if provided, the top-level command to run
  * @returns {DivinerPromise}
  */

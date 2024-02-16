@@ -2,7 +2,10 @@
   "name": "sf-entish",
   "version": "0.1.0",
   "description": "A declarative interface for working with the Salesforce Composite API",
-  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./types": "./lib/types"
+  },
   "scripts": {
     "debug:cli": "DEBUG='sf-entish*' node bin/sfent -- ",
     "debug:lib": "DEBUG='sf-entish*' node index.test.js",
