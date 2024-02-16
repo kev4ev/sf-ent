@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2024-02-16T19:49:14.924Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" etag="S94Vw2LuODpVYrIXkJry" version="23.1.4" type="device">
-  <diagram name="Page-1" id="13e1069c-82ec-6db2-03f1-153e76fe0fe0">
-    <mxGraphModel dx="1937" dy="1054" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1700" pageHeight="1100" background="none" math="0" shadow="0">
+<mxfile host="app.diagrams.net" modified="2024-02-16T23:03:39.981Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" etag="gn2bhg__2Obt79bM2-JD" version="23.1.4" type="device">
+  <diagram name="sequence" id="13e1069c-82ec-6db2-03f1-153e76fe0fe0">
+    <mxGraphModel dx="1325" dy="721" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1700" pageHeight="1100" background="none" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -72,7 +72,7 @@
         <mxCell id="Kui3dBX7CGbU3PAof87k-7" value="DivinerPromise.js" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;rounded=1;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;align=center;" vertex="1" parent="1">
           <mxGeometry x="380" y="150" width="105" height="210" as="geometry" />
         </mxCell>
-        <mxCell id="Kui3dBX7CGbU3PAof87k-32" value="rootDivinerPromise = DP" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=top;spacingLeft=2;" vertex="1" parent="Kui3dBX7CGbU3PAof87k-7">
+        <mxCell id="Kui3dBX7CGbU3PAof87k-32" value="rootDivinerPromise = :DP" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=top;spacingLeft=2;" vertex="1" parent="Kui3dBX7CGbU3PAof87k-7">
           <mxGeometry x="47.5" y="80" width="10" height="70" as="geometry" />
         </mxCell>
         <mxCell id="Kui3dBX7CGbU3PAof87k-12" value="" style="endArrow=none;startArrow=none;endFill=0;startFill=0;endSize=8;html=1;verticalAlign=bottom;dashed=1;labelBackgroundColor=default;dashPattern=10 10;rounded=0;backgroundOutline=0;" edge="1" parent="1">
@@ -103,7 +103,7 @@
         <mxCell id="Kui3dBX7CGbU3PAof87k-23" value="&amp;lt;&amp;lt;extends Promise&amp;gt;&amp;gt;&lt;br&gt;:DivinerPromise" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;rounded=1;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;align=center;" vertex="1" parent="1">
           <mxGeometry x="640" y="150" width="110" height="210" as="geometry" />
         </mxCell>
-        <mxCell id="Kui3dBX7CGbU3PAof87k-35" value="decorate self with&lt;br style=&quot;border-color: var(--border-color); font-size: 11px;&quot;&gt;&lt;span style=&quot;font-size: 11px; background-color: rgb(255, 255, 255);&quot;&gt;fn from hash; wrapping&lt;/span&gt;&lt;br style=&quot;border-color: var(--border-color); font-size: 11px;&quot;&gt;&lt;span style=&quot;font-size: 11px; background-color: rgb(255, 255, 255);&quot;&gt;each&lt;/span&gt;" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;spacingLeft=2;" vertex="1" parent="Kui3dBX7CGbU3PAof87k-23">
+        <mxCell id="Kui3dBX7CGbU3PAof87k-35" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;decorate self with&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;fn from hash; wrapping&lt;/span&gt;&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;each; this enables the chainable-fn-&lt;br&gt;calls (i.e. sync) API style&lt;br&gt;&lt;/span&gt;&lt;/font&gt;" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;spacingLeft=2;" vertex="1" parent="Kui3dBX7CGbU3PAof87k-23">
           <mxGeometry x="50" y="140" width="10" height="30" as="geometry" />
         </mxCell>
         <mxCell id="Kui3dBX7CGbU3PAof87k-26" value="new DivinerPromise(executorFn, Ent, undefined)" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1" source="Kui3dBX7CGbU3PAof87k-7" target="Kui3dBX7CGbU3PAof87k-23">
