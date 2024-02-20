@@ -5,16 +5,16 @@ const { ent } = require('./index.js');
     const result0 = 
         await ent()
             .generate({ out: './' })
-            .query({ query: 'SELECT Id FROM Case LIMIT 5' })
-            .query({ query: 'another query' })
+            .query('SELECT Id FROM Case LIMIT 5')
+            .query('another query')
             .done(); // returns root resolver
 
     debugger;
 
     // intermediate style
     const intermediate0 = ent().generate({ out: './' }),
-        intermediate1 = intermediate0.query({ query: 'SELECT Id FROM Case LIMIT 5' }),
-        intermediate2 = intermediate1.query({ query: 'another query' }),
+        intermediate1 = intermediate0.query('SELECT Id FROM Case LIMIT 5'),
+        intermediate2 = intermediate1.query('another query'),
         result1 = intermediate2.done();
 
 

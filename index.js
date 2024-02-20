@@ -6,17 +6,17 @@ const connect = require('./lib/utils/diviners/Connect');
 class Ent extends Command{
     /**
      * @param {import('./lib/types/command/Command').CommandArgs} args
-     * @param {string} [topCmd] should only provided when invoked from command line
+     * @param {string} [topCmd] only valid when provided from command line
      */
     constructor(args, topCmd){
         super(args);
         this.topCmd = topCmd;
         Object.defineProperties(this, {
             _hasAuthConnection: {
-                value: () => this.args.connection && this.args?.connection?.accessToken
+                value: () => this.connection && this?.connection?.accessToken
             }
         });
-        // if there is not an authorized connection, add the Promise to the this.args so that
+        // if there is not an authorized connection, add the Promise to the this so that
         // relayed Diviners inherit it; it will be resolved by this class during execution
         if(!this._hasAuthConnection()){
             let resolver, rejecter;
@@ -24,7 +24,7 @@ class Ent extends Command{
                 resolver = res;
                 rejecter = rej;
             });
-            this.args.connection = connPromise;
+            this.connection = connPromise;
             Object.defineProperties(this, {
                 _connResolver: { value: resolver },
                 _connRejecter: { value: rejecter }
@@ -53,11 +53,11 @@ class Ent extends Command{
     }
 
     async readyToExecute(){ 
-        return !this.args.interactive || this.args.topCmd ? true : 'User must provide top-level command';
+        return !this.interactive || this.topCmd ? true : 'User must provide top-level command';
     }  
 
     async executeInteractive(){
-        const { topCmd } = this.args;
+        const { topCmd } = this;
         // interactive mode; relay control to top-level Command and pass connection
         if(topCmd){
             const cmdWrapper = commands[topCmd];

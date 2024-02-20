@@ -22,7 +22,6 @@
     "dotenv": "^16.4.1",
     "enquirer": "^2.4.1",
     "mem-fs-editor": "^11.0.0",
-    "merge": "^2.1.1",
     "minimist": "^1.2.8"
   },
   "peerDependencies": {

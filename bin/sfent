@@ -1,6 +1,8 @@
 #! node
 const parser = require('minimist');
 const { ent, flagConfig } = require('../index');
+// set interactive mode
+require('../lib/types/command/Diviner').interactive();
 
 (async ()=>{
     let aliases = {}, defaults = {}, bools = [];
@@ -21,12 +23,11 @@ const { ent, flagConfig } = require('../index');
             boolean: bools,
             default: defaults
         });
-        opts.interactive = true; // always true from CLI
         // get first positional arg (top-level cmd)
         let cmd = opts._;
         delete opts._;
         
-        // call the command with the provided flags (args)
+        // call with the provided flags (args) and top-level cmd (may be undefined)
         await ent(opts, cmd);
     } catch(err){
         console.error(err.message);
