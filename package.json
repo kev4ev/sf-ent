@@ -4,8 +4,9 @@
   "description": "A declarative interface for working with the Salesforce Composite API",
   "exports": {
     ".": "./index.js",
-    "./enttypes": "./lib/types/index.js",
-    "./enttypes/api": "./lib/types/api/index.js"
+    "./etypes": "./lib/types/index.js",
+    "./etypes/api": "./lib/types/api/index.js",
+    "./etypes/command": "./lib/types/command/index.js"
   },
   "scripts": {
     "debug:cli": "DEBUG='sf-entish*' node bin/sfent -- ",

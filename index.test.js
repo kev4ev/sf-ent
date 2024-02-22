@@ -4,15 +4,18 @@ const { ent } = require('./index.js');
     // chain style
     const result0 = 
         await ent()
-            .generate({ out: './' })
+            .generate({ out: './.generated' })
             .query('SELECT Id FROM Case LIMIT 5')
             .query('another query')
-            .done(); // returns root resolver
+            .sobject('Account')
+                .GET('1,2,3,4,5')
+                .done() // returns root resolver
+            // .done();
 
     debugger;
 
     // intermediate style
-    const intermediate0 = ent().generate({ out: './' }),
+    const intermediate0 = ent().generate({ out: './.generated' }),
         intermediate1 = intermediate0.query('SELECT Id FROM Case LIMIT 5'),
         intermediate2 = intermediate1.query('another query'),
         result1 = intermediate2.done();
