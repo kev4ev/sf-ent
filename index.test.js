@@ -9,8 +9,8 @@ const { ent } = require('./index.js');
             .query('another query')
             .sobject('Account')
                 .GET('1,2,3,4,5')
-                .done() // returns root resolver
-            // .done();
+                .done() 
+            .done(); // returns root resolver
 
     debugger;
 
