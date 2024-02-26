@@ -20,10 +20,18 @@ const { ent } = require('./index.js');
         intermediate1 = intermediate0.query('SELECT Id FROM Case LIMIT 5'),
         intermediate2 = intermediate1.query('another query'),
         intermediate3 = intermediate2.sobject('Account').GET('1,2,3,4,5').done(),
-        result1 = intermediate3.done();
+        intermediate4 = intermediate3.query('subsequent query'),
+        result1 = intermediate4.done();
 
 
-    const results = await Promise.all([ intermediate0, intermediate1, intermediate2, intermediate3, result1 ]);
+    const results = await Promise.all([ 
+        intermediate0,
+        intermediate1,
+        intermediate2,
+        intermediate3,
+        intermediate4,
+        result1 
+    ]);
 
     debugger;
 })();
