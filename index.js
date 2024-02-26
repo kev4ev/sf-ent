@@ -32,9 +32,6 @@ class Ent extends Command{
         }
     }
 
-    /** @returns {import('./lib/types/command/CommandFlagConfig').FlagConfig} */
-    static get flagConfig(){ return Command.flagConfig; }
-
     getSubDiviners(){
         return commands;
     }
