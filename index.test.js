@@ -8,7 +8,7 @@ const { ent } = require('./index.js');
             .query('SELECT Id FROM Case LIMIT 5')
             .query('another query')
             .sobject('Account')
-                .GET('1,2,3,4,5')
+                .GET('1234567')
                 .done()
             .query('subsequent query')
             .done(); // returns root resolver
@@ -19,7 +19,7 @@ const { ent } = require('./index.js');
     const intermediate0 = ent().generate({ out: './.generated' }),
         intermediate1 = intermediate0.query('SELECT Id FROM Case LIMIT 5'),
         intermediate2 = intermediate1.query('another query'),
-        intermediate3 = intermediate2.sobject('Account').GET('1,2,3,4,5').done(),
+        intermediate3 = intermediate2.sobject('Account').GET('1234567').done(),
         intermediate4 = intermediate3.query('subsequent query'),
         result1 = intermediate4.done();
 
