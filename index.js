@@ -4,32 +4,18 @@ const relay = require('./lib/types/command/DivinerPromise');
 const connect = require('./lib/utils/diviners/Connect');
 
 class Ent extends Command{
+
+    #topArgs;
+    #connection;
+
     /**
      * @param {import('./lib/types/command/Command').CommandArgs} args
      * @param {string} [topCmd] only valid when provided from command line
      */
     constructor(args, topCmd){
         super(args);
+        this.#topArgs = args;
         this.topCmd = topCmd;
-        Object.defineProperties(this, {
-            _hasAuthConnection: {
-                value: () => this.connection && this?.connection?.accessToken
-            }
-        });
-        // if there is not an authorized connection, add the Promise to the this so that
-        // relayed Diviners inherit it; it will be resolved by this class during execution
-        if(!this._hasAuthConnection()){
-            let resolver, rejecter;
-            const connPromise = new Promise((res, rej) => {
-                resolver = res;
-                rejecter = rej;
-            });
-            this.connection = connPromise;
-            Object.defineProperties(this, {
-                _connResolver: { value: resolver },
-                _connRejecter: { value: rejecter }
-            });
-        }
     }
 
     getSubDiviners(){
@@ -57,15 +43,21 @@ class Ent extends Command{
         const { topCmd } = this;
         // interactive mode; relay control to top-level Command and pass connection
         if(topCmd){
-            const cmdWrapper = commands[topCmd];
-            // if cmd requires a JSForceConnection, establish and await it
-            if(cmdWrapper.requiresConnection && !this._hasAuthConnection()) await this.relay(connect);
+            const cmd = commands[topCmd];
 
             // return relay so that this will be registered as parent and cmd's lifecycle events will be fired to handler
-            return await this.relay(cmdWrapper);
+            return await this.relay(cmd, this.#topArgs);
         }
 
         throw new Error('Command could not be inferred');
+    }
+
+    async #setConnection(diviner){
+        if(!this.#connection){
+            this.#connection = await this.relay(connect);
+        }
+
+        diviner.connection = this.#connection;
     }
 
     /**
@@ -77,8 +69,8 @@ class Ent extends Command{
     async handleSubDivinerEvent(evt, payload, cmd){
         const isConnect = Object.getPrototypeOf(cmd).constructor.name === 'Connect';
         // make sure there is an authorized connection for cmds that need it prior to their execution
-        if(evt === 'called' && cmd.requiresConnection && !this._hasAuthConnection()){
-            await this.relay(connect);
+        if(evt === 'called' && cmd.requiresConnection){
+            await this.#setConnection(cmd);
         }
 
         if(evt === 'done' && isConnect){
