@@ -6,7 +6,6 @@ const connect = require('./lib/utils/diviners/Connect');
 class Ent extends Command{
 
     #topArgs;
-    #connection;
 
     /**
      * @param {import('./lib/types/command/Command').CommandArgs} args
@@ -52,12 +51,11 @@ class Ent extends Command{
         throw new Error('Command could not be inferred');
     }
 
-    async #setConnection(diviner){
-        if(!this.#connection){
-            this.#connection = await this.relay(connect);
+    async #setConnection(){
+        if(!this.connection){
+            const conn = await this.relay(connect);
+            Command.connection(conn);
         }
-
-        diviner.connection = this.#connection;
     }
 
     /**
