@@ -71,10 +71,6 @@ class Ent extends Command{
             await this.#setConnection(cmd);
         }
 
-        if(evt === 'done' && isConnect){
-            this._connResolver(payload);
-        }
-
         if(evt !== 'called' && !isConnect){
             // Ent  must call done() internally as it will never be called externally
             this.done();
