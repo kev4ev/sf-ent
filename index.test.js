@@ -5,12 +5,15 @@ const { ent } = require('./index.js');
     const result0 = 
         await ent()
             .generate({ out: './.generated' })
-            .query('SELECT Id FROM Case LIMIT 5')
-            .query('another query')
-            .sobject('Account')
-                .GET('1234567')
-                .done()
-            .query('subsequent query')
+                .query('SELECT Id FROM Case LIMIT 5')
+                .query('another query')
+                .sobject('Account')
+                    .GET('1234567')
+                    .done()
+                .query('subsequent query')
+                .sobject('Case')
+                    .POST({ Subject: 'A Test Case' })
+                    .done()
             .done(); // returns root resolver
 
     debugger;
