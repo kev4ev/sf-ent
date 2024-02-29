@@ -12,6 +12,21 @@
                 "<node_internals>/**"
             ],
             "type": "node"
+        },
+        {
+            "name": "Inspect CLI",
+            "request": "launch",
+            "runtimeArgs": [
+                "run",
+                "inspect:cli",
+                "--inspect"
+            ],
+            "runtimeExecutable": "/usr/share/node/node-v20.11.0-linux-x64/bin/npm",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node",
+            "console": "integratedTerminal"
         }
     ]
 }

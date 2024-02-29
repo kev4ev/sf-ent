@@ -46,3 +46,9 @@ From the **command line**...
 $ sfent generate --out ./query.json 
 $ # user will be prompted to provide query and create the request file
 ```
+
+<!-- highlights:
+ - async generator functions
+ - Promise extension
+ - fun with Symbols
+ -->

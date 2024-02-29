@@ -8,7 +8,7 @@ const { ent } = require('./index.js');
                 .query('SELECT Id FROM Case LIMIT 5')
                 .query('another query')
                 .sobject('Account')
-                    .GET('1234567')
+                    .READ('1234567')
                     .done()
                 .query('subsequent query')
                 .sobject('Case')

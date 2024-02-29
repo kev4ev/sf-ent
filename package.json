@@ -11,7 +11,7 @@
   "scripts": {
     "debug:cli": "DEBUG='sf-entish*' node bin/sfent -- ",
     "debug:lib": "DEBUG='sf-entish*' node index.test.js",
-    "inspect:cli": "DEBUG='sf-entish*' node --inspect-brk bin/sfent -- ",
+    "inspect:cli": "DEBUG='sf-entish*' node --inspect bin/sfent -- ",
     "inspect:lib": "DEBUG='sf-entish*' node --inspect-brk index.test.js -- ",
     "test": "node --inspect-brk ./lib/types/DivinerPromise.test.js"
   },
