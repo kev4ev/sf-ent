@@ -7,13 +7,16 @@ const { ent } = require('./index.js');
             .generate({ out: './.generated' })
                 .query('SELECT Id FROM Case LIMIT 5')
                 .query('another query')
+                .sobject('Contact')
+                    .CREATE({ FirstName: 'Jim', LastName: 'Bob', Custom_Bool__c: true })
+                    .done()
                 .sobject('Account')
                     .READ('1234567')
                     .done()
-                .query('subsequent query')
                 .sobject('Case')
-                    .POST({ Subject: 'A Test Case' })
+                    .UPDATE({ Subject: 'Updated Subject' })
                     .done()
+                .query('subsequent query')
             .done(); // returns root resolver
 
     debugger;
