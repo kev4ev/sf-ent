@@ -48,7 +48,9 @@ $ # user will be prompted to provide query and create the request file
 ```
 
 <!-- highlights:
- - async generator functions
- - Promise extension
- - fun with Symbols
+ - async generator functions => for prompts
+ - Promise extension => to allow synchronous API chaining in lib
+ - Streams => generate preview
+ - events => this is JS, after all
+ - fun with Symbols => because why not
  -->
