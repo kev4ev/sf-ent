@@ -25,7 +25,7 @@ class Ent extends Command{
         yield [
             {
                 name: 'topCmd',
-                type: 'select',
+                type: 'autocomplete',
                 required: true,
                 skip: this.topCmd,
                 choices: Object.keys(this.getSubDiviners()),

@@ -1,6 +1,7 @@
 {
   "name": "sf-entish",
   "version": "0.1.0",
+  "bin": "./bin/sfent",
   "description": "A declarative interface for working with the Salesforce Composite API",
   "exports": {
     ".": "./index.js",
