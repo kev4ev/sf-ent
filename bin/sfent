@@ -2,7 +2,7 @@
 const parser = require('minimist');
 const { ent, flagConfig } = require('../index');
 // set interactive mode
-require('../lib/types/command/Diviner').interactive();
+ent.interactive(true);
 
 (async ()=>{
     let aliases = {}, defaults = {}, bools = [];

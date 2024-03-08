@@ -1,0 +1,10 @@
+
+
+
+
+
+./.generated
+query
+never
+select id from case limit 1
+done

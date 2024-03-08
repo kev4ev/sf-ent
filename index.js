@@ -2,6 +2,7 @@ const commands = require('./lib/commands');
 const Command = require('./lib/types/command/Command');
 const relay = require('./lib/types/command/DivinerPromise');
 const connect = require('./lib/utils/diviners/Connect');
+const { interactive } = require('./lib/types/command/Diviner');
 
 class Ent extends Command{
 
@@ -92,6 +93,7 @@ function initEnt(args={}, topCmd){
 
     return relay(ent);
 }
+initEnt.interactive = (bool=true) => interactive(bool);
 
 module.exports = {
     ent: initEnt,
