@@ -6,15 +6,12 @@ const { interactive } = require('./lib/types/command/Diviner');
 
 class Ent extends Command{
 
-    #topArgs;
-
     /**
      * @param {import('./lib/types/command/Command').CommandArgs} args
      * @param {string} [topCmd] only valid when provided from command line
      */
     constructor(args, topCmd){
         super(args);
-        this.#topArgs = args;
         this.topCmd = topCmd;
     }
 
@@ -23,33 +20,11 @@ class Ent extends Command{
     }
 
     async *getPrompts(){
-        yield [
-            {
-                name: 'topCmd',
-                type: 'autocomplete',
-                required: true,
-                skip: this.topCmd,
-                choices: Object.keys(this.getSubDiviners()),
-                message: 'Select command to execute'
-            }
-        ];
+        // no additional prompts necessary
     }
 
     async readyToExecute(){ 
         return !this.interactive || this.topCmd ? true : 'User must provide top-level command';
-    }  
-
-    async executeInteractive(){
-        const { topCmd } = this;
-        // interactive mode; relay control to top-level Command and pass connection
-        if(topCmd){
-            const cmd = commands[topCmd];
-
-            // return relay so that this will be registered as parent and cmd's lifecycle events will be fired to handler
-            return await this.relay(cmd, this.#topArgs);
-        }
-
-        throw new Error('Command could not be inferred');
     }
 
     async #setConnection(){
@@ -89,7 +64,7 @@ class Ent extends Command{
  * @returns {DivinerPromise}
  */
 function initEnt(args={}, topCmd){
-    const ent = new Ent(args, undefined, topCmd);
+    const ent = Ent.init(args, topCmd);
 
     return relay(ent);
 }

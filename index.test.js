@@ -8,13 +8,13 @@ const { ent } = require('./index.js');
                 .query('SELECT Id FROM Case LIMIT 5')
                 .query('another query')
                 .sobject('Contact')
-                    .CREATE({ FirstName: 'Jim', LastName: 'Bob', Custom_Bool__c: true })
+                    .create({ FirstName: 'Jim', LastName: 'Bob', Custom_Bool__c: true })
                     .done()
                 .sobject('Account')
-                    .READ('1234567')
+                    .read('1234567')
                     .done()
                 .sobject('Case')
-                    .UPDATE({ Subject: 'Updated Subject' })
+                    .update('12345', { Subject: 'Updated Subject' })
                     .done()
                 .query('subsequent query')
             .done(); // returns root resolver
@@ -22,20 +22,30 @@ const { ent } = require('./index.js');
     debugger;
 
     // intermediate style
-    const intermediate0 = ent().generate({ out: './.generated' }),
-        intermediate1 = intermediate0.query('SELECT Id FROM Case LIMIT 5'),
-        intermediate2 = intermediate1.query('another query'),
-        intermediate3 = intermediate2.sobject('Account').GET('1234567').done(),
-        intermediate4 = intermediate3.query('subsequent query'),
-        result1 = intermediate4.done();
+    const inter0 = ent().generate({ out: './.generated' }),
+        inter1 = inter0.query('SELECT Id FROM Case LIMIT 5'),
+        inter2 = inter1.query('another query'),
+        inter3 = inter2.sobject('Contact')
+            .create({ FirstName: 'Jim', LastName: 'Bob', Custom_Bool__c: true })
+            .done(),
+        inter4 = inter3.sobject('Account')
+            .read('1234567')
+            .done(),
+        inter5 = inter4.sobject('Case')
+            .update('12345', { Subject: 'Updated Subject' })
+            .done(),
+        inter6 = inter5.query('subsequent query'),
+        result1 = inter6.done();
 
 
     const results = await Promise.all([ 
-        intermediate0,
-        intermediate1,
-        intermediate2,
-        intermediate3,
-        intermediate4,
+        inter0,
+        inter1,
+        inter2,
+        inter3,
+        inter4,
+        inter5, 
+        inter6,
         result1 
     ]);
 
