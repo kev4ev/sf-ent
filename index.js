@@ -1,7 +1,6 @@
 const commands = require('./lib/commands');
 const Command = require('./lib/types/command/Command');
 const relay = require('./lib/types/command/DivinerPromise');
-const connect = require('./lib/utils/diviners/Connect');
 const { interactive } = require('./lib/types/command/Diviner');
 
 class Ent extends Command{
@@ -28,10 +27,7 @@ class Ent extends Command{
     }
 
     async #setConnection(){
-        if(!this.connection){
-            const conn = await this.relay(connect);
-            Command.connection(conn);
-        }
+        if(!this.connection) await this.getConnection();
     }
 
     /**
@@ -41,13 +37,12 @@ class Ent extends Command{
      * @param {import('./lib/types/command/Command')} cmd
      */
     async handleSubDivinerEvent(evt, payload, cmd){
-        const isConnect = Object.getPrototypeOf(cmd).constructor.name === 'Connect';
         // make sure there is an authorized connection for cmds that need it prior to their execution
         if(evt === 'called' && cmd.requiresConnection){
             await this.#setConnection(cmd);
         }
 
-        if(evt !== 'called' && !isConnect){
+        if(evt !== 'called'){
             // Ent  must call done() internally as it will never be called externally
             this.done();
             if(evt === 'error') return this.doneRejecter(payload);
