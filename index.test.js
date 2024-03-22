@@ -1,6 +1,25 @@
 const { ent } = require('./index.js');
 
 (async()=>{
+    // yields command array for consistent testing of styles; Array[0] is the method (cmd/subcmd)
+    // to invoke and remaining items are args to that method
+    function* commands(){
+        yield [ 'generate', { out: './.generated' } ];
+            yield [ 'query', 'SELECT Id FROM Case LIMIT 5' ];
+            yield [ 'query', 'another query' ];
+            yield [ 'sobject', 'Contact' ];
+                yield [ 'create', { FirstName: 'Jim', LastName: 'Bob', Custom_Bool__c: true } ];
+                yield [ 'done' ];
+            yield [ 'sobject', 'Account' ];
+                yield [ 'read', '1234567' ];
+                yield [ 'done' ];
+            yield [ 'sobject', 'Case' ];
+                yield [ 'update', '12345', { Subject: 'Updated Subject' } ];
+                yield [ 'done' ];
+            yield [ 'query', 'subsequent query' ];
+        yield [ 'done' ]; // should returns root resolve
+    }
+
     // chain style
     const result0 = 
         await ent()
