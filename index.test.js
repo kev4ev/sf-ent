@@ -1,9 +1,11 @@
-const { ent } = require('./index.js');
+const lib = require('./index.js');
 
-(async()=>{
-    // yields command array for consistent testing of styles; Array[0] is the method (cmd/subcmd)
-    // to invoke and remaining items are args to that method
-    function* commands(){
+/**
+ * yields command array for consistent testing of styles; Array[0] is the method (cmd/subcmd)
+ * to invoke and remaining items are args to that method
+ */
+function* commands(){
+    yield [ 'ent' ];
         yield [ 'generate', { out: './.generated' } ];
             yield [ 'query', 'SELECT Id FROM Case LIMIT 5' ];
             yield [ 'query', 'another query' ];
@@ -17,31 +19,52 @@ const { ent } = require('./index.js');
                 yield [ 'update', '12345', { Subject: 'Updated Subject' } ];
                 yield [ 'done' ];
             yield [ 'query', 'subsequent query' ];
-        yield [ 'done' ]; // should returns root resolve
-    }
+        yield [ 'done' ];
+    yield [ 'done' ]; // closes ent() and returns root resolver
+}
 
-    // chain style
-    const result0 = 
-        await ent()
-            .generate({ out: './.generated' })
-                .query('SELECT Id FROM Case LIMIT 5')
-                .query('another query')
-                .sobject('Contact')
-                    .create({ FirstName: 'Jim', LastName: 'Bob', Custom_Bool__c: true })
-                    .done()
-                .sobject('Account')
-                    .read('1234567')
-                    .done()
-                .sobject('Case')
-                    .update('12345', { Subject: 'Updated Subject' })
-                    .done()
-                .query('subsequent query')
-            .done(); // returns root resolver
+(async()=>{
 
+    /*********************
+     * chained test
+     *********************/
+
+    // get the iterator
+    const cmdIter = commands();
+    let cmdAry = cmdIter.next();
+
+    // initialize chained variable and chain until done
+    let chainedDivinerPromise = lib;
+    while(cmdAry.done !== true){
+        const { value } = cmdAry;
+        if(value){
+            const cmd = value.shift();
+            chainedDivinerPromise = chainedDivinerPromise[cmd](...value);
+        }
+        cmdAry = cmdIter.next();
+    } 
+
+    const chainedResult = await chainedDivinerPromise;
     debugger;
+    
+    /**
+     * chained style is more conveniently written with top-level await, as such...
+     * 
+     *   const result0 = await lib.ent()
+     *           .generate({ out: './.generated' })
+     *               // ...etc
+     *       .done(); // closes ent, returns root resolver
+     * 
+     * ...but cmd generator is used to ensure test consistency/parity between chained and intermediate styles
+     */
 
-    // intermediate style
-    const inter0 = ent().generate({ out: './.generated' }),
+    /*********************
+     * intermediate test
+     *********************/
+
+    // TODO refactor to use generator
+
+    const inter0 = lib.ent().generate({ out: './.generated' }),
         inter1 = inter0.query('SELECT Id FROM Case LIMIT 5'),
         inter2 = inter1.query('another query'),
         inter3 = inter2.sobject('Contact')
