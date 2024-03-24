@@ -8,6 +8,7 @@ function* commands(){
     yield [ 'ent' ];
         yield [ 'generate', { out: './.generated' } ];
             yield [ 'query', 'SELECT Id FROM Case LIMIT 5' ];
+                yield [ 'refId', 'customQuery0' ];
             yield [ 'query', 'another query' ];
             yield [ 'sobject', 'Contact' ];
                 yield [ 'create', { FirstName: 'Jim', LastName: 'Bob', Custom_Bool__c: true } ];
