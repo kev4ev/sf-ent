@@ -10,15 +10,17 @@ function* commands(){
             yield [ 'query', 'SELECT Id FROM Case LIMIT 5' ];
                 yield [ 'refId', 'customQuery0' ];
             yield [ 'query', 'another query' ];
+                yield [ 'refId', 'customQuery1' ];
             yield [ 'sobject', 'Contact' ];
                 yield [ 'create', { FirstName: 'Jim', LastName: 'Bob', Custom_Bool__c: true } ];
-                yield [ 'done' ];
+                yield [ 'refId', 'contact0' ];
+                yield [ 'done' ]; // TODO can eliminate by calling from sub?
             yield [ 'sobject', 'Account' ];
                 yield [ 'read', '1234567' ];
-                yield [ 'done' ];
+                yield [ 'done' ]; // TODO can eliminate by calling from sub?
             yield [ 'sobject', 'Case' ];
                 yield [ 'update', '12345', { Subject: 'Updated Subject' } ];
-                yield [ 'done' ];
+                yield [ 'done' ]; // TODO can eliminate by calling from sub?
             yield [ 'query', 'subsequent query' ];
         yield [ 'done' ];
     yield [ 'done' ]; // closes ent() and returns root resolver
