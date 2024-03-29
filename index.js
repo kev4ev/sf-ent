@@ -2,15 +2,8 @@ const commands = require('./lib/commands');
 const Command = require('./lib/types/command/Command');
 const relay = require('./lib/types/command/DivinerPromise');
 const { interactive } = require('./lib/types/command/Diviner');
-
-/**
- * an interface that conforms to necessary keys for JSForce or OrgAuthorization type from 
- * \@salesforce/core {@see https://forcedotcom.github.io/sfdx-core/types/org_authInfo.OrgAuthorization.html}
- * @typedef {object} ConnectionInterface 
- * @property {string} accessToken
- * @property {string} instanceUrl
- * @property {Array<string>} [aliases]
- */
+const cache = require('./lib/utils/connection/cache');
+const Connect = require('./lib/utils/connection/Connect');
 
 /**
  * @typedef {object} EntArgs
@@ -29,9 +22,14 @@ class Ent extends Command{
         this.topCmd = topCmd;
         // handle connections
         const conns = args.connections || [];
-        if(args.connection) conns.push(args.connection);
+        if(args.connection){
+            // add to cache collection
+            conns.push(args.connection);
+            // set as preferred and initial conn
+            Connect.initial = args.connection;
+        }
         if(conns.length > 0){
-            // TODO replace cache with org infos
+            cache.setAll(conns);
         }
     }
 
