@@ -1,3 +1,4 @@
+const assert = require('node:assert');
 const lib = require('./index.js');
 
 /**
@@ -48,8 +49,10 @@ function* commands(){
     } 
 
     const chainedResult = await chainedDivinerPromise;
-    debugger;
     
+    const expected = JSON.stringify(require('./test/lib/expected.json'));
+    const actual = JSON.stringify(chainedResult);
+    assert.equal(expected, actual);
     /**
      * chained style is more conveniently written with top-level await, as such...
      * 

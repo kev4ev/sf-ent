@@ -19,6 +19,7 @@
     "test:generate:script": "node ./test/cli/generate.js",
     "test:run:script": "node ./test/cli/index.js",
     "test": "node --inspect-brk ./lib/types/DivinerPromise.test.js",
+    "test:lib": "DEBUG='sf-entish*' node index.test.js",
     "test:lib:inspect": "DEBUG='sf-entish*' node --inspect-brk index.test.js"
   },
   "author": "",

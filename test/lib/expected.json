@@ -1,0 +1,44 @@
+{
+    "allOrNone": true,
+    "collateSubrequests": false,
+    "compositeRequest": [
+        {
+            "method": "GET",
+            "url": "/services/data/v60.0/query/?q=SELECT Id FROM Case LIMIT 5",
+            "referenceId": "customQuery0"
+        },
+        {
+            "method": "GET",
+            "url": "/services/data/v60.0/query/?q=another query",
+            "referenceId": "customQuery1"
+        },
+        {
+            "method": "POST",
+            "url": "/services/data/v60.0/sobjects/Contact/Id",
+            "body": {
+                "FirstName": "Jim",
+                "LastName": "Bob",
+                "Custom_Bool__c": true
+            },
+            "referenceId": "SObjectPOST_Contact_0"
+        },
+        {
+            "method": "GET",
+            "url": "/services/data/v60.0/sobjects/Account/1234567",
+            "referenceId": "SObjectGET_Account_0"
+        },
+        {
+            "method": "PATCH",
+            "url": "/services/data/v60.0/sobjects/Case/12345",
+            "body": {
+                "Subject": "Updated Subject"
+            },
+            "referenceId": "SObjectPATCH_Case_0"
+        },
+        {
+            "method": "GET",
+            "url": "/services/data/v60.0/query/?q=subsequent query",
+            "referenceId": "Query_0"
+        }
+    ]
+}
