@@ -63,7 +63,7 @@ $ # user will be prompted to provide query and create the request file
 }
 ```
 
-It does this so that the prototype can be inferred when a request is loaded into the CLI for interactive modificiation. Since hashes are not read by the server **it has no effect on the request** to Salesforce. 
+It does this so that the prototype can be inferred when a request is loaded into the CLI for interactive modification. Since hashes are not read by the server **it has no effect on the request** to Salesforce. 
 
 
 <!-- highlights:
