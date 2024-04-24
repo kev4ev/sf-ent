@@ -47,6 +47,25 @@ $ sfent generate --out ./query.json
 $ # user will be prompted to provide query and create the request file
 ```
 
+# API
+
+# Notes
+
+## TypeInfo in URL Hash <span id="urlTypeInfo"></span>
+
+`sf-ent` appends the name of the class that constructs each Composite subrequest as a URL hash, a la:
+
+```json
+{
+    // ...
+    "url": "/services/data/v60.0/query/?q=SELECT id FROM Account limit 1#Query_github.com/kev4ev/sf-ent#urlTypeInfo"
+    // ...
+}
+```
+
+It does this so that the prototype can be inferred when a request is loaded into the CLI for interactive modificiation. Since hashes are not read by the server **it has no effect on the request** to Salesforce. 
+
+
 <!-- highlights:
  - async generator functions => for prompts
  - Promise extension => to allow synchronous API chaining in lib
