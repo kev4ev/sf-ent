@@ -5,6 +5,14 @@
     "sf-ent": "./bin/sfent",
     "ent": "./bin/sfent" 
   },
+  "files": [
+    "bin/",
+    "lib/",
+    "index.js",
+    "LICENSE",
+    "package.json",
+    "README.md"
+  ],
   "description": "A declarative interface for working with the Salesforce Composite API",
   "exports": {
     ".": "./index.js",
