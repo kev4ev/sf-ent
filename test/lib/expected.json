@@ -4,32 +4,32 @@
     "compositeRequest": [
         {
             "method": "GET",
-            "url": "/services/data/v60.0/query/?q=SELECT Id FROM Case LIMIT 5",
+            "url": "/services/data/v60.0/query/?q=SELECT Id FROM Case LIMIT 5#Query_github.com/kev4ev/sf-ent#urlTypeInfo",
             "referenceId": "customQuery0"
         },
         {
             "method": "GET",
-            "url": "/services/data/v60.0/query/?q=another query",
+            "url": "/services/data/v60.0/query/?q=another query#Query_github.com/kev4ev/sf-ent#urlTypeInfo",
             "referenceId": "customQuery1"
         },
         {
             "method": "POST",
-            "url": "/services/data/v60.0/sobjects/Contact/Id",
+            "url": "/services/data/v60.0/sobjects/Contact/Id#SObject_github.com/kev4ev/sf-ent#urlTypeInfo",
             "body": {
                 "FirstName": "Jim",
                 "LastName": "Bob",
                 "Custom_Bool__c": true
             },
-            "referenceId": "SObjectPOST_Contact_0"
+            "referenceId": "contact0"
         },
         {
             "method": "GET",
-            "url": "/services/data/v60.0/sobjects/Account/1234567",
+            "url": "/services/data/v60.0/sobjects/Account/1234567#SObject_github.com/kev4ev/sf-ent#urlTypeInfo",
             "referenceId": "SObjectGET_Account_0"
         },
         {
             "method": "PATCH",
-            "url": "/services/data/v60.0/sobjects/Case/12345",
+            "url": "/services/data/v60.0/sobjects/Case/12345#SObject_github.com/kev4ev/sf-ent#urlTypeInfo",
             "body": {
                 "Subject": "Updated Subject"
             },
@@ -37,7 +37,7 @@
         },
         {
             "method": "GET",
-            "url": "/services/data/v60.0/query/?q=subsequent query",
+            "url": "/services/data/v60.0/query/?q=subsequent query#Query_github.com/kev4ev/sf-ent#urlTypeInfo",
             "referenceId": "Query_0"
         }
     ]

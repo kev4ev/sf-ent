@@ -5,12 +5,15 @@ const { ent, flagConfig } = require('../index');
 ent.interactive(true);
 
 (async ()=>{
+    // get first positional arg (top-level cmd)
+    const cmd = process.argv[2];
+
     let aliases = {}, defaults = {}, bools = [];
-    Object.entries(flagConfig).forEach(entry => {
+    Object.entries(flagConfig(cmd)).forEach(entry => {
         if(entry){
             const [ key, val ] = entry;
-            const { alias, bool, initial } = val;
-            if(alias) aliases[alias] = key;
+            const { char, bool, initial } = val;
+            if(char) aliases[char] = key;
             if(initial) defaults[key] = initial;
             if(bool) bools.push(key);
         }
@@ -23,8 +26,8 @@ ent.interactive(true);
             boolean: bools,
             default: defaults
         });
-        // get first positional arg (top-level cmd)
-        let cmd = opts._;
+        
+        // delete top-level cmd, if present
         delete opts._;
         
         // call with the provided flags (args) and top-level cmd (may be undefined)

@@ -21,10 +21,8 @@
     "./etypes/command": "./lib/types/command/index.js"
   },
   "scripts": {
-    "debug:cli": "DEBUG='sf-entish*' node bin/sfent -- ",
-    "debug:lib": "DEBUG='sf-entish*' node index.test.js",
-    "inspect:cli": "DEBUG='sf-entish*' node --inspect bin/sfent -- ",
-    "inspect:lib": "DEBUG='sf-entish*' node --inspect-brk index.test.js -- ",
+    "inspect:cli": "DEBUG='sf-entish*' node --inspect-brk bin/sfent",
+    "inspect:lib": "DEBUG='sf-entish*' node --inspect-brk index.test.js",
     "inspect:generate:script": "node --inspect-brk ./test/cli/generate.js",
     "inspect:run:script": "node --inspect-brk ./test/cli/index.js",
     "test:generate:script": "node ./test/cli/generate.js",

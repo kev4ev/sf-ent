@@ -50,9 +50,10 @@ function* commands(){
 
     const chainedResult = await chainedDivinerPromise;
     
-    const expected = JSON.stringify(require('./test/lib/expected.json'));
-    const actual = JSON.stringify(chainedResult);
-    assert.equal(expected, actual);
+    const expectedPath = './test/lib/expected.json',
+        expected = JSON.stringify(require(expectedPath)),
+        actual = JSON.stringify(chainedResult);
+    assert.equal(expected, actual, `Actual output does not match expected from: ${expectedPath}`);
     /**
      * chained style is more conveniently written with top-level await, as such...
      * 
