@@ -37,6 +37,13 @@ class Ent extends Command {
     }
 
     /**
+     * Convenience getter for help documentation
+     */
+    static get commands(){
+        return Object.keys(commands);
+    }
+
+    /**
      * shadows superclass property so that flags can be retrieved for a subcommand
      * @param {string} subCmd 
      */
@@ -99,6 +106,7 @@ function initEnt(args = {}, topCmd) {
     return relay(ent);
 }
 initEnt.interactive = (bool = true) => interactive(bool);
+initEnt.commands = Ent.commands;
 
 module.exports = {
     ent: initEnt,
