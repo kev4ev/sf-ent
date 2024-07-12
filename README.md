@@ -1,53 +1,54 @@
-> _It is a lovely language, but it takes a very long time to say anything in it, because we do not say anything in it, unless it is worth taking a long time to say, and to listen to._
+
+⛔ _This is a beta version that is not suitable for production use_. 
 
 # Intro 
 
-The Salesforce Composite API is an invaluable tool for loading complex data across orgs and at volume. But, much like Old Entish 🌳, its endpoints require a dialect that is verbose and time-consuming to construct. Let's make things a bit more "hasty".
+<!--
+> _It is a lovely language, but it takes a very long time to say anything in it, because we do not say anything in it, unless it is worth taking a long time to say, and to listen to._ -->
 
-`sf-entish` provides a declarative API for building composite payloads quickly and intuitively. Use it interactively from the command line or as a library in a script. This library adds some helpful tricks and shortcuts such as **randomization** and **variable placeholders** to get you up-and-running quickly.
+The [Salesforce Composite API](https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/resources_composite_composite.htm) is an invaluable tool for loading complex data sets across orgs. It is also, unfortunately, verbose and time-consuming to implement.
+
+`sf-ent` makes harnessing the Composite API fast and intuitive. Use it **interactively from the command line** or programmatically as a **script library**. Build requests and load data quickly.
 
 # Installation
 
 ```sh
-npm install [--global] sf-entish
-```
-
-This library also drives the Salesforce CLI (sf) plugin `sf-plugin-composite`. If you wish to install only as a plugin to the sf command line you can do so as such:
-
-```sh
-sf plugins install sf-plugin-composite
+npm install [--global] sf-ent
 ```
 
 # Usage
 
-Usage from the command line and through a script are very similar. Commands and subcommands for each have the same names. The primary difference is that when used as a library, all arguments must be provided to each command upon invocation. From the command-line, the user will be prompted for all responses, though top-level commands may support flags. 
+The CLI and script APIs are very similar. Commands and subcommands for each use the same names. 
+
+The primary difference is that the CLI will prompt you for required inputs and provides **object and field auto-completion based on the schema of an authenticated org**. Some CLI commands also support flags. Pass `-h` or `--help` with any command to learn more.
+
+
+## `generate`
 
 The following shows an example of using the `generate` command to create a composite API request file with a single `query` subrequest:
 
-Within a **script**...
-
-```js
-const Ent = require('sf-entish');
-
-// constructor accepts an authorized jsforce Connection instance; 
-// otherwise, either of (1) $SFUNAME and $SFPWD or (2) $SFSID are required to be present as shell variables
-const ent = new Ent();
-// all ent methods are chainable and return a Promise that resolves to an instance of RequestBuilder or Ent
-await ent 
-    .generate({ out: './query.json' })
-        .query('select id from recordType where sobjectType = \'Account\' and developerName = \'consumer\'')
-        .endCommand()
-    .finish();
-```
-
-From the **command line**...
+**CLI**:
 
 ```sh
 $ sfent generate --out ./query.json 
-$ # user will be prompted to provide query and create the request file
+$ # prompts will guide you to create the query
+```
+
+**Script**:
+
+```js
+const { ent } = require('sf-ent');
+
+// all commands are chainable and must be terminated by invocation of done(), returning a Promise that resolves to the command output
+await ent()
+    .generate({ out: './query.json' })
+        .query('select id from recordType where sobjectType = \'Account\' and developerName = \'consumer\'')
+    .done();
 ```
 
 # API
+
+_Full documentation coming soon._
 
 # Notes
 
@@ -65,6 +66,7 @@ $ # user will be prompted to provide query and create the request file
 
 It does this so that the prototype can be inferred when a request is loaded into the CLI for interactive modification. Since hashes are not read by the server **it has no effect on the request** to Salesforce. 
 
+Happy Building!
 
 <!-- highlights:
  - async generator functions => for prompts

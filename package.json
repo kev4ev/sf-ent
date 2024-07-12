@@ -1,6 +1,6 @@
 {
   "name": "sf-ent",
-  "version": "0.2.0",
+  "version": "0.5.0",
   "bin": { 
     "sf-ent": "./bin/sfent",
     "ent": "./bin/sfent" 
