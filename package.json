@@ -1,6 +1,6 @@
 {
   "name": "sf-ent",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "bin": { 
     "sf-ent": "./bin/sfent",
     "ent": "./bin/sfent" 
@@ -32,7 +32,7 @@
     "test:lib:inspect": "DEBUG='sf-entish*' node --inspect-brk index.test.js"
   },
   "author": "kev4ev",
-  "repository": "github.com/kev4ev/sf-ent",
+  "repository": "kev4ev/sf-ent",
   "license": "GPL-2.0-only",
   "dependencies": {
     "axios": "^1.6.7",
